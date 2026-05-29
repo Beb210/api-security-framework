@@ -1,0 +1,488 @@
+{
+  "session_id": "cf728309-837c-4b50-bf0c-9b49a84aa522",
+  "start_time": "2026-05-12T00:28:00.743769",
+  "status": "COMPLETED",
+  "total_findings": 60,
+  "findings": [
+    {
+      "vuln_id": "5325d6a0",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/identity/api/auth/signup",
+      "description": "Отсутствует ограничение частоты запросов (10 rapid requests).",
+      "evidence": "10 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "2747130b",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/identity/api/auth/forget-password",
+      "description": "Отсутствует ограничение частоты запросов (10 rapid requests).",
+      "evidence": "10 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "b3e4a4b1",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/identity/api/auth/v3/check-otp",
+      "description": "Отсутствуют защитные заголовки: verbose errors/debug mode.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:29:13 GMT', 'Content-Type': 'application/json', 'Content-Length': '76', 'Connection': 'k"
+    },
+    {
+      "vuln_id": "c61ee918",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/identity/api/auth/v2/check-otp",
+      "description": "Отсутствуют защитные заголовки: verbose errors/debug mode.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:29:20 GMT', 'Content-Type': 'application/json', 'Content-Length': '76', 'Connection': 'k"
+    },
+    {
+      "vuln_id": "804a0cd3",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/identity/api/v2/user/reset-password",
+      "description": "Отсутствует ограничение частоты запросов (10 rapid requests).",
+      "evidence": "10 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "10895ad1",
+      "name": "API9: Improper Inventory Management (Shadow/Legacy API)",
+      "severity": 7,
+      "endpoint": "/identity/api/v2/user/reset-password",
+      "description": "Обнаружен устаревший или теневой эндпоинт.",
+      "evidence": "{\"message\":\"Password reset successful.\",\"status\":0}"
+    },
+    {
+      "vuln_id": "6ee637c2",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/identity/api/v2/user/verify-email-token",
+      "description": "Отсутствуют защитные заголовки: verbose errors/debug mode.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:30:24 GMT', 'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked', 'Connect"
+    },
+    {
+      "vuln_id": "98b92a1b",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/identity/api/v2/user/dashboard",
+      "description": "Отсутствует ограничение частоты запросов (10 rapid requests).",
+      "evidence": "10 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "12e22458",
+      "name": "API9: Improper Inventory Management (Shadow/Legacy API)",
+      "severity": 7,
+      "endpoint": "/identity/api/v2/user/dashboard",
+      "description": "Обнаружен устаревший или теневой эндпоинт.",
+      "evidence": "{\"id\":8,\"name\":\"Scanner\",\"email\":\"scan_82186@test.local\",\"number\":\"99982186000\",\"picture_url\":null,\"video_url\":null,\"video_name\":null,\"available_credit\":100.0,\"video_id\":0,\"role\":\"ROLE_USER\"}"
+    },
+    {
+      "vuln_id": "6e100ee1",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/identity/api/v2/user/pictures",
+      "description": "Отсутствуют защитные заголовки: verbose errors/debug mode.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:30:53 GMT', 'Content-Type': 'application/json', 'Content-Length': '42', 'Connection': 'k"
+    },
+    {
+      "vuln_id": "7b2c5cec",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/identity/api/v2/user/videos",
+      "description": "Отсутствуют защитные заголовки: verbose errors/debug mode.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:30:59 GMT', 'Content-Type': 'application/json', 'Content-Length': '42', 'Connection': 'k"
+    },
+    {
+      "vuln_id": "95724159",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/identity/api/v2/vehicle/vehicles",
+      "description": "Отсутствует ограничение частоты запросов (10 rapid requests).",
+      "evidence": "10 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "f168e649",
+      "name": "API9: Improper Inventory Management (Shadow/Legacy API)",
+      "severity": 7,
+      "endpoint": "/identity/api/v2/vehicle/vehicles",
+      "description": "Обнаружен устаревший или теневой эндпоинт.",
+      "evidence": "[]"
+    },
+    {
+      "vuln_id": "91559ade",
+      "name": "API3: Mass Assignment",
+      "severity": 8,
+      "endpoint": "/identity/api/v2/vehicle/resend_email",
+      "description": "Сервер принял привилегированное поле 'role' без явной валидации.",
+      "evidence": "{\"message\":\"Your newly purchased Vehicle Details have been sent to you email address. If you have used example.com email, check your email using the MailHog web portal. \",\"status\":200}"
+    },
+    {
+      "vuln_id": "3c61ed89",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/identity/api/v2/vehicle/resend_email",
+      "description": "Отсутствует ограничение частоты запросов (10 rapid requests).",
+      "evidence": "10 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "3bc371a2",
+      "name": "API9: Improper Inventory Management (Shadow/Legacy API)",
+      "severity": 7,
+      "endpoint": "/identity/api/v2/vehicle/resend_email",
+      "description": "Обнаружен устаревший или теневой эндпоинт.",
+      "evidence": "{\"message\":\"Your newly purchased Vehicle Details have been sent to you email address. If you have used example.com email, check your email using the MailHog web portal. \",\"status\":200}"
+    },
+    {
+      "vuln_id": "c8add1a5",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/community/api/v2/community/posts/{postId}",
+      "description": "Отсутствуют защитные заголовки: x-content-type-options, strict-transport-security, x-frame-options.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:33:04 GMT', 'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked', 'Connect"
+    },
+    {
+      "vuln_id": "71f53f1a",
+      "name": "API3: Mass Assignment",
+      "severity": 8,
+      "endpoint": "/community/api/v2/community/posts",
+      "description": "Сервер принял привилегированное поле 'role' без явной валидации.",
+      "evidence": "{\"id\":\"zRdif2Pd5Ti5639DByCnyX\",\"title\":\"\",\"content\":\"\",\"author\":{\"nickname\":\"Scanner\",\"email\":\"scan_82186@test.local\",\"vehicleid\":\"\",\"profile_pic_url\":\"\",\"created_at\":\"2026-05-11T21:33:18.940017219Z\"}"
+    },
+    {
+      "vuln_id": "8d283716",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/community/api/v2/community/posts",
+      "description": "Отсутствует ограничение частоты запросов (10 rapid requests).",
+      "evidence": "10 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "93c5aabd",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/community/api/v2/community/posts",
+      "description": "Отсутствуют защитные заголовки: x-content-type-options, strict-transport-security, x-frame-options.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:33:16 GMT', 'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked', 'Connect"
+    },
+    {
+      "vuln_id": "649b54e2",
+      "name": "API9: Improper Inventory Management (Shadow/Legacy API)",
+      "severity": 7,
+      "endpoint": "/community/api/v2/community/posts",
+      "description": "Обнаружен устаревший или теневой эндпоинт.",
+      "evidence": "{\"id\":\"AbUYa8qU7RvKemYZRw6x2e\",\"title\":\"Security Test\",\"content\":\"Testing API business flows\",\"author\":{\"nickname\":\"Scanner\",\"email\":\"scan_82186@test.local\",\"vehicleid\":\"\",\"profile_pic_url\":\"\",\"create"
+    },
+    {
+      "vuln_id": "ef5546fa",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/community/api/v2/community/posts/{postId}/comment",
+      "description": "Отсутствуют защитные заголовки: x-content-type-options, strict-transport-security, x-frame-options.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:33:41 GMT', 'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked', 'Connect"
+    },
+    {
+      "vuln_id": "6aeafd0b",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/community/api/v2/community/posts/recent",
+      "description": "Отсутствует ограничение частоты запросов (10 rapid requests).",
+      "evidence": "10 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "4288e868",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/community/api/v2/community/posts/recent",
+      "description": "Отсутствуют защитные заголовки: x-content-type-options, strict-transport-security, x-frame-options.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:33:58 GMT', 'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked', 'Connect"
+    },
+    {
+      "vuln_id": "6e6235fc",
+      "name": "API9: Improper Inventory Management (Shadow/Legacy API)",
+      "severity": 7,
+      "endpoint": "/community/api/v2/community/posts/recent",
+      "description": "Обнаружен устаревший или теневой эндпоинт.",
+      "evidence": "{\"posts\":[{\"id\":\"zRdif2Pd5Ti5639DByCnyX\",\"title\":\"\",\"content\":\"\",\"author\":{\"nickname\":\"Scanner\",\"email\":\"scan_82186@test.local\",\"vehicleid\":\"\",\"profile_pic_url\":\"\",\"created_at\":\"2026-05-11T21:33:18.94"
+    },
+    {
+      "vuln_id": "52732274",
+      "name": "API3: Mass Assignment",
+      "severity": 8,
+      "endpoint": "/community/api/v2/coupon/new-coupon",
+      "description": "Сервер принял привилегированное поле 'role' без явной валидации.",
+      "evidence": "Empty 200/201 response"
+    },
+    {
+      "vuln_id": "0cd11ca0",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/community/api/v2/coupon/new-coupon",
+      "description": "Отсутствует ограничение частоты запросов (10 rapid requests).",
+      "evidence": "10 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "c7800717",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/community/api/v2/coupon/new-coupon",
+      "description": "Отсутствуют защитные заголовки: x-content-type-options, strict-transport-security, x-frame-options.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:34:20 GMT', 'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked', 'Connect"
+    },
+    {
+      "vuln_id": "6840d338",
+      "name": "API9: Improper Inventory Management (Shadow/Legacy API)",
+      "severity": 7,
+      "endpoint": "/community/api/v2/coupon/new-coupon",
+      "description": "Обнаружен устаревший или теневой эндпоинт.",
+      "evidence": "\"Coupon Added in database\"\n"
+    },
+    {
+      "vuln_id": "54ac3bd4",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/community/api/v2/coupon/validate-coupon",
+      "description": "Отсутствует ограничение частоты запросов (10 rapid requests).",
+      "evidence": "10 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "6479afd4",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/community/api/v2/coupon/validate-coupon",
+      "description": "Отсутствуют защитные заголовки: x-content-type-options, strict-transport-security, x-frame-options.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:34:45 GMT', 'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked', 'Connect"
+    },
+    {
+      "vuln_id": "f715b96f",
+      "name": "API9: Improper Inventory Management (Shadow/Legacy API)",
+      "severity": 7,
+      "endpoint": "/community/api/v2/coupon/validate-coupon",
+      "description": "Обнаружен устаревший или теневой эндпоинт.",
+      "evidence": "{\"coupon_code\":\"string\",\"amount\":\"string\",\"CreatedAt\":\"2026-05-11T21:34:20.613Z\"}\n"
+    },
+    {
+      "vuln_id": "d6200290",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/workshop/api/shop/products",
+      "description": "Отсутствует ограничение частоты запросов (10 rapid requests).",
+      "evidence": "10 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "2fda0688",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/workshop/api/shop/products",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:35:11 GMT', 'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked', 'Connect"
+    },
+    {
+      "vuln_id": "e15e6f69",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/workshop/api/shop/products",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:35:34 GMT', 'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked', 'Connect"
+    },
+    {
+      "vuln_id": "60e77a36",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/workshop/api/shop/orders",
+      "description": "Отсутствует ограничение частоты запросов (10 rapid requests).",
+      "evidence": "10 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "602f1979",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/workshop/api/shop/orders",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:35:41 GMT', 'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked', 'Connect"
+    },
+    {
+      "vuln_id": "cbf7cf9a",
+      "name": "API1: Broken Object Level Authorization (BOLA)",
+      "severity": 9,
+      "endpoint": "/workshop/api/shop/orders/{order_id}",
+      "description": "Доступ к объекту с ID 1 без проверки владения.",
+      "evidence": "{\"order\":{\"id\":1,\"user\":{\"email\":\"adam007@example.com\",\"number\":\"9876895423\"},\"product\":{\"id\":1,\"name\":\"Seat\",\"price\":\"10.00\",\"image_url\":\"images/seat.svg\"},\"quantity\":2,\"status\":\"delivered\",\"transact"
+    },
+    {
+      "vuln_id": "00e0e736",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/workshop/api/shop/orders/{order_id}",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:36:07 GMT', 'Content-Type': 'text/html; charset=utf-8', 'Transfer-Encoding': 'chunked', "
+    },
+    {
+      "vuln_id": "da22d7e6",
+      "name": "API1: Broken Object Level Authorization (BOLA)",
+      "severity": 9,
+      "endpoint": "/workshop/api/shop/orders/{order_id}",
+      "description": "Доступ к объекту с ID 1 без проверки владения.",
+      "evidence": "{\"order\":{\"id\":1,\"user\":{\"email\":\"adam007@example.com\",\"number\":\"9876895423\"},\"product\":{\"id\":1,\"name\":\"Seat\",\"price\":\"10.00\",\"image_url\":\"images/seat.svg\"},\"quantity\":2,\"status\":\"delivered\",\"transact"
+    },
+    {
+      "vuln_id": "f4b3747d",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/workshop/api/shop/orders/{order_id}",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:36:12 GMT', 'Content-Type': 'text/html; charset=utf-8', 'Transfer-Encoding': 'chunked', "
+    },
+    {
+      "vuln_id": "45520215",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/workshop/api/shop/orders/all",
+      "description": "Отсутствует ограничение частоты запросов (10 rapid requests).",
+      "evidence": "10 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "251913cf",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/workshop/api/shop/orders/all",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:36:16 GMT', 'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked', 'Connect"
+    },
+    {
+      "vuln_id": "9f7af369",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/workshop/api/shop/orders/return_order",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:36:39 GMT', 'Content-Type': 'text/html; charset=utf-8', 'Transfer-Encoding': 'chunked', "
+    },
+    {
+      "vuln_id": "8ebeb924",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/workshop/api/shop/apply_coupon",
+      "description": "Отсутствует ограничение частоты запросов (10 rapid requests).",
+      "evidence": "10 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "fc0a5541",
+      "name": "API6: Unrestricted Access to Sensitive Business Flows",
+      "severity": 8,
+      "endpoint": "/workshop/api/shop/apply_coupon",
+      "description": "Бизнес-процесс выполнен без обязательной валидации состояния.",
+      "evidence": "{\"credit\":165.0,\"message\":\"Coupon successfully applied!\"}"
+    },
+    {
+      "vuln_id": "fa98df6c",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/workshop/api/shop/apply_coupon",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:36:46 GMT', 'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked', 'Connect"
+    },
+    {
+      "vuln_id": "f9735c13",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/workshop/api/shop/return_qr_code",
+      "description": "Отсутствует ограничение частоты запросов (10 rapid requests).",
+      "evidence": "10 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "8fe89fed",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/workshop/api/shop/return_qr_code",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:37:12 GMT', 'Content-Type': 'image/png', 'Content-Length': '7189', 'Connection': 'keep-a"
+    },
+    {
+      "vuln_id": "55f668aa",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/workshop/api/management/users/all",
+      "description": "Отсутствует ограничение частоты запросов (10 rapid requests).",
+      "evidence": "10 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "8a2aefd3",
+      "name": "API5: Broken Function Level Authorization (BFLA)",
+      "severity": 9,
+      "endpoint": "/workshop/api/management/users/all",
+      "description": "Административный эндпоинт доступен для обычного пользователя.",
+      "evidence": "{\"users\":[{\"user\":{\"email\":\"adam007@example.com\",\"number\":\"9876895423\"},\"available_credit\":100.0},{\"user\":{\"email\":\"pogba006@example.com\",\"number\":\"9876570006\"},\"available_credit\":100.0},{\"user\":{\"ema"
+    },
+    {
+      "vuln_id": "9837ad29",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/workshop/api/management/users/all",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:37:35 GMT', 'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked', 'Connect"
+    },
+    {
+      "vuln_id": "40dc8fa7",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/workshop/api/mechanic/",
+      "description": "Отсутствует ограничение частоты запросов (10 rapid requests).",
+      "evidence": "10 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "07a5d83c",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/workshop/api/mechanic/",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:37:58 GMT', 'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked', 'Connect"
+    },
+    {
+      "vuln_id": "9167c092",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/workshop/api/merchant/contact_mechanic",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:38:20 GMT', 'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked', 'Connect"
+    },
+    {
+      "vuln_id": "17634bf0",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/workshop/api/mechanic/receive_report",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:38:29 GMT', 'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked', 'Connect"
+    },
+    {
+      "vuln_id": "2ccc5749",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/workshop/api/mechanic/mechanic_report",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:38:31 GMT', 'Content-Type': 'text/html; charset=utf-8', 'Transfer-Encoding': 'chunked', "
+    },
+    {
+      "vuln_id": "98d952cc",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/workshop/api/mechanic/service_requests",
+      "description": "Отсутствует ограничение частоты запросов (10 rapid requests).",
+      "evidence": "10 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "01d968cf",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/workshop/api/mechanic/service_requests",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:38:34 GMT', 'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked', 'Connect"
+    },
+    {
+      "vuln_id": "06f0c2f4",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/workshop/api/mechanic/signup",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Server': 'openresty/1.27.1.2', 'Date': 'Mon, 11 May 2026 21:38:56 GMT', 'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked', 'Connect"
+    }
+  ]
+}

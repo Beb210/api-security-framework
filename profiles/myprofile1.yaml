@@ -1,0 +1,6 @@
+name: myprofile1
+description: Первый тестовый профиль
+detectors:
+- all
+severity_threshold: 1
+active_tests: true

@@ -1,0 +1,26 @@
+spec_path: "crapi-openapi-spec.json"
+base_url: "http://localhost:8888"
+timeout: 15
+max_threads: 2
+output_dir: "reports-crapi"
+
+profiles:
+  full:
+    description: "Полное покрытие OWASP API Top 10 с активными тестами"
+    detectors: ["all"]
+    severity_threshold: 4
+    active_tests: true
+    auth:
+      type: "signup_then_login"
+      signup_endpoint: "/identity/api/auth/signup"
+      login_endpoint: "/identity/api/auth/login"
+      signup_payload:
+        email: "scan_{rand}@test.local"
+        name: "Scanner"
+        number: "999{rand}000"
+        password: "SecurePass123!"
+      login_payload:
+        email: "scan_{rand}@test.local"
+        password: "SecurePass123!"
+      token_path: "token"
+      header_format: "Bearer {token}"

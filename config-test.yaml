@@ -1,0 +1,24 @@
+spec_path: "openapi_spec.yaml"
+base_url: "http://localhost:8080"  # Укажите ваш тестовый сервер
+timeout: 10
+max_threads: 2
+output_dir: "reports-test"
+
+profiles:
+  full:
+    description: "Тестовый профиль для демонстрации"
+    detectors: ["all"]
+    severity_threshold: 4
+    active_tests: true
+    auth:
+      type: "signup_then_login"
+      signup_endpoint: "/api/users"
+      login_endpoint: "/api/login"
+      signup_payload:
+        email: "scan_{rand}@test.local"
+        password: "TestPass123!"
+      login_payload:
+        email: "scan_{rand}@test.local"
+        password: "TestPass123!"
+      token_path: "token"
+      header_format: "Bearer {token}"

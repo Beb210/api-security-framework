@@ -1,0 +1,52 @@
+openapi: "3.0.0"
+info:
+  title: OWASP API Top 10 Test Server
+  version: "1.0.0"
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/orders/{order_id}:
+    get:
+      summary: Get order details (BOLA test)
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          schema: {type: integer}
+  /api/login:
+    post:
+      summary: User login (Auth & RateLimit test)
+  /api/users:
+    post:
+      summary: Create user (Mass Assignment test)
+  /api/search:
+    get:
+      summary: Search items (Rate Limit test)
+  /api/admin/config:
+    get:
+      summary: Admin configuration (BFLA test)
+  /api/checkout:
+    post:
+      summary: Process checkout (Business Flow test)
+  /api/fetch:
+    get:
+      summary: Fetch external URL (SSRF test)
+      parameters:
+        - name: url
+          in: query
+          required: true
+          schema: {type: string}
+  /api/health:
+    get:
+      summary: Health check (Misconfig test)
+  /api/v1/internal/metrics:
+    get:
+      summary: Legacy metrics (Inventory test)
+  /api/proxy:
+    get:
+      summary: Proxy request (Unsafe Consumption test)
+      parameters:
+        - name: target
+          in: query
+          required: true
+          schema: {type: string}

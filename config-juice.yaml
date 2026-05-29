@@ -1,0 +1,30 @@
+# config-juice.yaml
+spec_path: "openapi_spec.yaml"          # Используем вашу рабочую спецификацию
+base_url: "http://localhost:3000"       # Juice Shop на порту 3000
+timeout: 15
+max_threads: 3
+output_dir: "reports-juice"
+
+profiles:
+  full:
+    description: "Полное покрытие OWASP API Top 10 для Juice Shop"
+    detectors: ["all"]
+    severity_threshold: 4
+    active_tests: true
+    auth:
+      # Juice Shop использует вложенный токен: { "authentication": { "token": "..." } }
+      type: "signup_then_login"
+      signup_endpoint: "/api/Users"
+      login_endpoint: "/rest/user/login"
+      signup_payload:
+        email: "scan_{rand}@test.local"
+        password: "ScanPass123!"
+        passwordRepeat: "ScanPass123!"
+        securityQuestion:
+          id: 2
+          answer: "test"
+      login_payload:
+        email: "scan_{rand}@test.local"
+        password: "ScanPass123!"
+      token_path: "authentication.token"  # ⚠️ Важно: токен вложен!
+      header_format: "Bearer {token}"

@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отчёт сканирования API</title>
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 20px; background: #f4f6f9; color: #333; }
+        .container { max-width: 1000px; margin: auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        h1 { margin-top: 0; color: #1a2b4c; }
+        .meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; padding: 15px; background: #f8f9fa; border-radius: 6px; }
+        .meta p { margin: 0; font-size: 0.95rem; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e9ecef; }
+        th { background: #2c3e50; color: #fff; font-weight: 500; }
+        tr:hover { background: #f8f9fa; }
+        .sev { display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: bold; color: #fff; font-size: 0.85rem; }
+        .sev-high { background: #e74c3c; }
+        .sev-med { background: #f39c12; }
+        .sev-low { background: #2ecc71; }
+        .empty { text-align: center; padding: 40px; color: #7f8c8d; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛡️ Отчёт сканирования API</h1>
+        <div class="meta">
+            <p><strong>Session ID:</strong> 89f8f176-ad95-4491-a8ea-6d5ba2ce8919</p>
+            <p><strong>Дата начала:</strong> 2026-05-10 00:52:38</p>
+            <p><strong>Статус:</strong> COMPLETED</p>
+            <p><strong>Всего находок:</strong> 21</p>
+        </div>
+        
+        <table>
+            <thead><tr><th>Критичность</th><th>Категория</th><th>Эндпоинт</th><th>Описание</th></tr></thead>
+            <tbody>
+            
+            <tr>
+                <td><span class="sev sev-med">6/10</span></td>
+                <td>API8: Security Misconfiguration</td>
+                <td><code>/community/api/v2/community/posts/{postId}</code></td>
+                <td>Отсутствуют защитные заголовки: x-content-type-options, strict-transport-security, x-frame-options.</td>
+            </tr>
+            
+            <tr>
+                <td><span class="sev sev-med">6/10</span></td>
+                <td>API8: Security Misconfiguration</td>
+                <td><code>/community/api/v2/community/posts</code></td>
+                <td>Отсутствуют защитные заголовки: x-content-type-options, strict-transport-security, x-frame-options.</td>
+            </tr>
+            
+            <tr>
+                <td><span class="sev sev-med">6/10</span></td>
+                <td>API8: Security Misconfiguration</td>
+                <td><code>/community/api/v2/community/posts/{postId}/comment</code></td>
+                <td>Отсутствуют защитные заголовки: x-content-type-options, strict-transport-security, x-frame-options.</td>
+            </tr>
+            
+            <tr>
+                <td><span class="sev sev-med">6/10</span></td>
+                <td>API8: Security Misconfiguration</td>
+                <td><code>/community/api/v2/community/posts/recent</code></td>
+                <td>Отсутствуют защитные заголовки: x-content-type-options, strict-transport-security, x-frame-options.</td>
+            </tr>
+            
+            <tr>
+                <td><span class="sev sev-med">6/10</span></td>
+                <td>API8: Security Misconfiguration</td>
+                <td><code>/community/api/v2/coupon/new-coupon</code></td>
+                <td>Отсутствуют защитные заголовки: x-content-type-options, strict-transport-security, x-frame-options.</td>
+            </tr>
+            
+            <tr>
+                <td><span class="sev sev-med">6/10</span></td>
+                <td>API8: Security Misconfiguration</td>
+                <td><code>/community/api/v2/coupon/validate-coupon</code></td>
+                <td>Отсутствуют защитные заголовки: x-content-type-options, strict-transport-security, x-frame-options.</td>
+            </tr>
+            
+            <tr>
+                <td><span class="sev sev-med">6/10</span></td>
+                <td>API8: Security Misconfiguration</td>
+                <td><code>/workshop/api/shop/products</code></td>
+                <td>Отсутствуют защитные заголовки: strict-transport-security.</td>
+            </tr>
+            
+            <tr>
+                <td><span class="sev sev-med">6/10</span></td>
+                <td>API8: Security Misconfiguration</td>
+                <td><code>/workshop/api/shop/products</code></td>
+                <td>Отсутствуют защитные заголовки: strict-transport-security.</td>
+            </tr>
+            
+            <tr>
+                <td><span class="sev sev-med">6/10</span></td>
+                <td>API8: Security Misconfiguration</td>
+                <td><code>/workshop/api/shop/orders</code></td>
+                <td>Отсутствуют защитные заголовки: strict-transport-security.</td>
+            </tr>
+            
+            <tr>
+                <td><span class="sev sev-med">6/10</span></td>
+                <td>API8: Security Misconfiguration</td>
+                <td><code>/workshop/api/shop/orders/{order_id}</code></td>
+                <td>Отсутствуют защитные заголовки: strict-transport-security.</td>
+            </tr>
+            
+            <tr>
+                <td><span class="sev sev-med">6/10</span></td>
+                <td>API8: Security Misconfiguration</td>
+                <td><code>/workshop/api/shop/orders/{order_id}</code></td>
+                <td>Отсутствуют защитные заголовки: strict-transport-security.</td>
+            </tr>
+            
+            <tr>
+                <td><span class="sev sev-med">6/10</span></td>
+                <td>API8: Security Misconfiguration</td>
+                <td><code>/workshop/api/shop/orders/all</code></td>
+                <td>Отсутствуют защитные заголовки: strict-transport-security.</td>
+            </tr>
+            
+            <tr>
+                <td><span class="sev sev-med">6/10</span></td>
+                <td>API8: Security Misconfiguration</td>
+                <td><code>/workshop/api/shop/orders/return_order</code></td>
+                <td>Отсутствуют защитные заголовки: strict-transport-security.</td>
+            </tr>
+            
+            <tr>
+                <td><span class="sev sev-med">6/10</span></td>
+                <td>API8: Security Misconfiguration</td>
+                <td><code>/workshop/api/shop/apply_coupon</code></td>
+                <td>Отсутствуют защитные заголовки: strict-transport-security.</td>
+            </tr>
+            
+            <tr>
+                <td><span class="sev sev-med">6/10</span></td>
+                <td>API8: Security Misconfiguration</td>
+                <td><code>/workshop/api/management/users/all</code></td>
+                <td>Отсутствуют защитные заголовки: strict-transport-security.</td>
+            </tr>
+            
+            <tr>
+                <td><span class="sev sev-med">6/10</span></td>
+                <td>API8: Security Misconfiguration</td>
+                <td><code>/workshop/api/mechanic/</code></td>
+                <td>Отсутствуют защитные заголовки: strict-transport-security.</td>
+            </tr>
+            
+            <tr>
+                <td><span class="sev sev-med">6/10</span></td>
+                <td>API8: Security Misconfiguration</td>
+                <td><code>/workshop/api/merchant/contact_mechanic</code></td>
+                <td>Отсутствуют защитные заголовки: strict-transport-security.</td>
+            </tr>
+            
+            <tr>
+                <td><span class="sev sev-med">6/10</span></td>
+                <td>API8: Security Misconfiguration</td>
+                <td><code>/workshop/api/mechanic/receive_report</code></td>
+                <td>Отсутствуют защитные заголовки: strict-transport-security.</td>
+            </tr>
+            
+            <tr>
+                <td><span class="sev sev-med">6/10</span></td>
+                <td>API8: Security Misconfiguration</td>
+                <td><code>/workshop/api/mechanic/mechanic_report</code></td>
+                <td>Отсутствуют защитные заголовки: strict-transport-security.</td>
+            </tr>
+            
+            <tr>
+                <td><span class="sev sev-med">6/10</span></td>
+                <td>API8: Security Misconfiguration</td>
+                <td><code>/workshop/api/mechanic/service_requests</code></td>
+                <td>Отсутствуют защитные заголовки: strict-transport-security.</td>
+            </tr>
+            
+            <tr>
+                <td><span class="sev sev-med">6/10</span></td>
+                <td>API8: Security Misconfiguration</td>
+                <td><code>/workshop/api/mechanic/signup</code></td>
+                <td>Отсутствуют защитные заголовки: strict-transport-security.</td>
+            </tr>
+            
+            </tbody>
+        </table>
+        
+    </div>
+</body>
+</html>

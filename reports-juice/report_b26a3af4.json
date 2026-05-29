@@ -1,0 +1,48 @@
+{
+  "session_id": "b26a3af4-3bec-4fad-b2f1-2ef7671c83c4",
+  "start_time": "2026-05-10T00:27:43.579270",
+  "status": "COMPLETED",
+  "total_findings": 5,
+  "findings": [
+    {
+      "vuln_id": "7c349a43",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/rest/user/login",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "93688efe",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/api/Products",
+      "description": "Отсутствует ограничение частоты запросов.",
+      "evidence": "8 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "7088df9d",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/api/Products",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "267c769d",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/rest/user/whoami",
+      "description": "Отсутствует ограничение частоты запросов.",
+      "evidence": "8 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "e44c1b5b",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/rest/user/whoami",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    }
+  ]
+}

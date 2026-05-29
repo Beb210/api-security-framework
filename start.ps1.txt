@@ -1,0 +1,21 @@
+# start.ps1
+Set-Location "C:\Users\romas\api-security-framework"
+venv\Scripts\activate
+
+Write-Host "[1/4] Запуск crAPI..." -ForegroundColor Cyan
+Set-Location "C:\Users\romas\Documents\crAPI\deploy\docker"
+docker compose up -d
+Start-Sleep -Seconds 40
+Set-Location "C:\Users\romas\api-security-framework"
+
+Write-Host "[2/4] Очистка кэша..." -ForegroundColor Cyan
+Remove-Item -Recurse -Force __pycache__, src\api_sec\__pycache__ -ErrorAction SilentlyContinue
+
+Write-Host "[3/4] Проверка доступности..." -ForegroundColor Cyan
+$code = curl.exe -s -o /dev/null -w "%{http_code}" http://localhost:8888
+if ($code -eq "200" -or $code -eq "301") {
+    Write-Host "[4/4] Запуск сканирования..." -ForegroundColor Green
+    python -u -m api_sec.cli --scan --config config-crapi.yaml --profile full
+} else {
+    Write-Host "❌ crAPI не отвечает (HTTP $code). Проверьте Docker Desktop." -ForegroundColor Red
+}

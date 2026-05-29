@@ -1,0 +1,15 @@
+name: MyTesetProfile3
+description: Это тестовый профиль
+detectors:
+- API1_BOLA
+- API2_BrokenAuth
+- API5_BFLA
+- API7_SSRF
+severity_threshold: 8
+active_tests: true
+auth:
+  type: form_login
+custom_payloads: {}
+rate_limit:
+  max_requests: 100
+  delay_sec: 0.0

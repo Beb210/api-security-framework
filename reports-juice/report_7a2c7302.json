@@ -1,0 +1,96 @@
+{
+  "session_id": "7a2c7302-ce29-4824-9303-ebaa66610211",
+  "start_time": "2026-05-13T09:19:29.833867",
+  "status": "COMPLETED",
+  "total_findings": 11,
+  "findings": [
+    {
+      "vuln_id": "074ce884",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/api/orders/{order_id}",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "ec84050c",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/api/login",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "379f1f6d",
+      "name": "API3: Mass Assignment",
+      "severity": 8,
+      "endpoint": "/api/users",
+      "description": "Сервер принял привилегированное поле 'price' без явной валидации.",
+      "evidence": "{\"status\":\"success\",\"data\":{\"username\":\"\",\"role\":\"customer\",\"deluxeToken\":\"\",\"lastLoginIp\":\"0.0.0.0\",\"profileImage\":\"/assets/public/images/uploads/default.svg\",\"isActive\":true,\"id\":34,\"updatedAt\":\"202"
+    },
+    {
+      "vuln_id": "96113688",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/api/users",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "8a2521c6",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/api/search",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "af90e1a4",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/api/admin/config",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "6ebc2ba8",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/api/checkout",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "1b87951c",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/api/fetch",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "6270b06b",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/api/health",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "feffac9b",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/api/v1/internal/metrics",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "1e79e842",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/api/proxy",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    }
+  ]
+}

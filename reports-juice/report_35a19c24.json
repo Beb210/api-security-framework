@@ -1,0 +1,160 @@
+{
+  "session_id": "35a19c24-5c85-45ee-a212-c061784fea44",
+  "start_time": "2026-05-10T01:49:29.267834",
+  "status": "COMPLETED",
+  "total_findings": 19,
+  "findings": [
+    {
+      "vuln_id": "aaab520d",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/rest/user/login",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "6c5dbd9a",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/api/Products",
+      "description": "Отсутствует ограничение частоты запросов.",
+      "evidence": "8 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "ed6742f0",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/api/Products",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "110b440e",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/api/Products/{id}",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "69eb726b",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/rest/user/whoami",
+      "description": "Отсутствует ограничение частоты запросов.",
+      "evidence": "8 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "61cf0c09",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/rest/user/whoami",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "f0dccf92",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/api/Basket",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "f6938ebf",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/api/Basket",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "97c9c0be",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/rest/basket/{id}/checkout",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "877ef60c",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/rest/admin/application-configuration",
+      "description": "Отсутствует ограничение частоты запросов.",
+      "evidence": "8 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "c6134c4d",
+      "name": "API5: Broken Function Level Authorization (BFLA)",
+      "severity": 9,
+      "endpoint": "/rest/admin/application-configuration",
+      "description": "Административный эндпоинт доступен без проверки роли.",
+      "evidence": "{\"config\":{\"server\":{\"port\":3000,\"basePath\":\"\",\"baseUrl\":\"http://localhost:3000\"},\"application\":{\"domain\":\"juice-sh.op\",\"name\":\"OWASP Juice Shop\",\"logo\":\"JuiceShop_Logo.png\",\"favicon\":\"favicon_js.ico\""
+    },
+    {
+      "vuln_id": "a5d5dd58",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/rest/admin/application-configuration",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "4bc6ab9d",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/rest/user/change-password",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "d11e6ff1",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/rest/product/search",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "31c0c3c6",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/rest/track-order/{id}",
+      "description": "Отсутствует ограничение частоты запросов.",
+      "evidence": "8 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "8df15123",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/rest/track-order/{id}",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "6779fa81",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/rest/coupon",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "9fb9441a",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/api/Challenges",
+      "description": "Отсутствует ограничение частоты запросов.",
+      "evidence": "8 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "301104f0",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/api/Challenges",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    }
+  ]
+}

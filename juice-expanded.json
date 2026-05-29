@@ -1,0 +1,24 @@
+{
+  "openapi": "3.0.1",
+  "info": {"title": "Juice Shop API", "version": "1.0"},
+  "servers": [{"url": "http://localhost:3000"}],
+  "paths": {
+    "/rest/user/login": {"post": {"security": [], "requestBody": {"content": {"application/json": {"schema": {"type": "object", "properties": {"email": {"type": "string"}, "password": {"type": "string"}}}}}}}},
+    "/api/Products": {"get": {"security": []}},
+    "/api/Products/{id}": {"get": {"security": [], "parameters": [{"name": "id", "in": "path", "schema": {"type": "integer"}}]}},
+    "/rest/user/whoami": {"get": {"security": [{"bearerAuth": []}]}},
+    "/api/Basket": {"get": {"security": [{"bearerAuth": []}]}, "post": {"security": [{"bearerAuth": []}]}},
+    "/rest/basket/{id}/checkout": {"post": {"security": [{"bearerAuth": []}]}},
+    "/rest/admin/application-configuration": {"get": {"security": []}},
+    "/rest/user/change-password": {"post": {"security": [{"bearerAuth": []}]}},
+    "/rest/product/search": {"get": {"security": [], "parameters": [{"name": "q", "in": "query", "schema": {"type": "string"}}]}},
+    "/rest/track-order/{id}": {"get": {"security": [], "parameters": [{"name": "id", "in": "path", "schema": {"type": "string"}}]}},
+    "/rest/coupon": {"post": {"security": [{"bearerAuth": []}], "requestBody": {"content": {"application/json": {"schema": {"type": "object", "properties": {"coupon": {"type": "string"}, "discount": {"type": "integer"}}}}}}}},
+    "/api/Challenges": {"get": {"security": []}}
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}
+    }
+  }
+}

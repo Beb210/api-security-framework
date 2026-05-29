@@ -1,0 +1,42 @@
+# Конфигурация для тестирования на OWASP crAPI
+spec_path: "crapi-openapi-spec.json"  # или "crapi_spec.json"
+base_url: "http://localhost:8888"
+timeout: 15          # Увеличено для микросервисной архитектуры crAPI
+max_threads: 2       # Снижено для предотвращения перегрузки Docker
+output_dir: "reports"
+log_level: "INFO"
+
+profiles:
+  quick:
+    description: "Быстрая проверка для CI/CD (только пассивные детекторы)"
+    detectors: ["API2", "API4", "API8"]
+    severity_threshold: 7
+    active_tests: false
+    auth:
+      type: "none"
+
+  full:
+    description: "Полное покрытие OWASP API Top 10 с активными тестами"
+    detectors: ["all"]
+    severity_threshold: 4
+    active_tests: true
+    auth:
+      type: "auto_register"
+
+  targeted:
+    description: "Специализированная проверка под crAPI"
+    detectors: ["API1", "API3", "API5", "API7", "API9"]
+    severity_threshold: 5
+    active_tests: true
+    auth:
+      type: "bearer_manual"
+      token: ""  # Можно указать токен вручную
+    custom_payloads:
+      API1:
+        test_ids: ["999999", "000000", "-1"]
+      API3:
+        privileged_fields: ["role", "price", "discount", "is_admin"]
+      API7:
+        ssrf_targets: ["http://localhost:8000", "http://169.254.169.254/latest/meta-data/"]
+      API9:
+        legacy_patterns: ["/v0/", "/legacy/", "/backup/", "/internal-metrics"]

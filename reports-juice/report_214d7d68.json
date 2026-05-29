@@ -1,0 +1,48 @@
+{
+  "session_id": "214d7d68-7d75-42a4-8ace-d54af447cc00",
+  "start_time": "2026-05-09T03:14:00.862209",
+  "status": "COMPLETED",
+  "total_findings": 5,
+  "findings": [
+    {
+      "vuln_id": "d868637d",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/rest/user/login",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "efc6f20b",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/api/Products",
+      "description": "Отсутствует ограничение частоты запросов (8 запросов не вернули 429).",
+      "evidence": "8 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "35addb40",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/api/Products",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    },
+    {
+      "vuln_id": "6b1fbf89",
+      "name": "API4: Unrestricted Resource Consumption (No Rate Limit)",
+      "severity": 6,
+      "endpoint": "/rest/user/whoami",
+      "description": "Отсутствует ограничение частоты запросов (8 запросов не вернули 429).",
+      "evidence": "8 rapid requests returned 200 OK"
+    },
+    {
+      "vuln_id": "49f09dd0",
+      "name": "API8: Security Misconfiguration",
+      "severity": 6,
+      "endpoint": "/rest/user/whoami",
+      "description": "Отсутствуют защитные заголовки: strict-transport-security.",
+      "evidence": "{'Access-Control-Allow-Origin': '*', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Feature-Policy': \"payment 'self'\", 'X-Recr"
+    }
+  ]
+}

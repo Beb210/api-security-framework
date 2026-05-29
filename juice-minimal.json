@@ -1,0 +1,37 @@
+{
+  "openapi": "3.0.1",
+  "info": {"title": "Juice Shop API", "version": "1.0"},
+  "servers": [{"url": "http://localhost:3000"}],
+  "paths": {
+    "/rest/user/login": {
+      "post": {
+        "security": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": {"type": "string", "example": "admin@juice-sh.op"},
+                  "password": {"type": "string", "example": "admin123"}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Products": {"get": {"security": []}},
+    "/rest/user/whoami": {"get": {"security": [{"bearerAuth": []}]}}
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
