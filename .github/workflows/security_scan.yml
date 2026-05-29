@@ -5,7 +5,7 @@ on:
     branches: [ "main", "master" ]
   pull_request:
     branches: [ "main", "master" ]
-  workflow_dispatch:  # Позволяет запускать вручную из вкладки Actions
+  workflow_dispatch:
 
 jobs:
   security-scan:
@@ -25,18 +25,20 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # 🔹 НОВЫЙ ШАГ: Запуск целевого API (crAPI) в Docker
+    # 🔹 ИСПРАВЛЕНО: docker compose (V2) вместо docker-compose
     - name: 🐳 Start crAPI Environment
       run: |
         echo "📦 Клонируем репозиторий crAPI..."
         git clone --depth 1 https://github.com/OWASP/crAPI.git
         
-        echo "🚀 Запускаем crAPI через Docker Compose..."
+        echo "🚀 Запускаем crAPI через Docker Compose V2..."
         cd crAPI/deploy/docker
-        docker-compose up -d
         
-        echo "⏳ Ожидаем запуск сервисов (60-90 сек)..."
-        sleep 90
+        # ✅ Используем "docker compose" (V2) вместо "docker-compose"
+        docker compose up -d
+        
+        echo "⏳ Ожидаем запуск сервисов (90-120 сек)..."
+        sleep 120
         
         echo "🔍 Проверяем доступность API..."
         curl -f http://localhost:8888/identity/api/v2/user/dashboard || echo "⚠️ API check failed, continuing anyway..."
@@ -48,24 +50,23 @@ jobs:
         python src/api_sec/cli.py scan \
           --config config-crapi.yaml \
           --profile full
-      continue-on-error: true  # Не прерывать пайплайн, даже если найдены уязвимости
+      continue-on-error: true
 
-    # 🔹 ИСПРАВЛЕНО: Путь к отчётам (reports-crapi вместо reports)
+    # 🔹 Пути к отчётам (используем reports*, так как в коде отчёты пишутся в reports-crapi/)
     - name: 📤 Upload HTML Report
       uses: actions/upload-artifact@v4
       if: always()
       with:
         name: security-report-html
-        path: reports-crapi/*.html
+        path: reports*/**/*.html
         retention-days: 30
 
-    # 🔹 ИСПРАВЛЕНО: Путь к отчётам (reports-crapi вместо reports)
     - name: 📤 Upload JSON Report
       uses: actions/upload-artifact@v4
       if: always()
       with:
         name: security-report-json
-        path: reports-crapi/*.json
+        path: reports*/**/*.json
         retention-days: 30
 
     - name: 📊 Security Summary
