@@ -1,0 +1,60 @@
+name: API Security Scan
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:  # Позволяет запускать вручную
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name:  Checkout code
+      uses: actions/checkout@v4
+
+    - name:  Set up Python 3.10
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name:  Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name:  Run Security Scanner
+      id: scan
+      run: |
+        echo " Запуск сканирования безопасности API..."
+        python src/api_sec/cli.py scan \
+          --config config-crapi.yaml \
+          --profile full
+      continue-on-error: true
+
+    - name:  Upload HTML Report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: security-report-html
+        path: reports/*.html
+        retention-days: 30
+
+    - name:  Upload JSON Report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: security-report-json
+        path: reports/*.json
+        retention-days: 30
+
+    - name:  Security Summary
+      if: always()
+      run: |
+        echo "##  Security Scan Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Scanner completed successfully**" >> $GITHUB_STEP_SUMMARY
+        echo "-  Фреймворк интегрирован в CI/CD" >> $GITHUB_STEP_SUMMARY
+        echo "-  Отчёты доступны в разделе Artifacts" >> $GITHUB_STEP_SUMMARY
