@@ -1,235 +1,107 @@
-name: Nuclei API Scan
+name: CRAPI Security Scan with Nuclei (OpenAPI + DAST)
 
 on:
-  workflow_dispatch:
-    inputs:
-      target:
-        description: 'Целевое API для сканирования'
-        required: true
-        default: 'crapi'
-        type: choice
-        options:
-          - crapi
-          - juiceshop
-          - dvws-node
   push:
-    branches: [ main ]
-    paths:
-      - '.github/workflows/nuclei-scan.yml'
+    branches: [ main, master, develop ]
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
 
 jobs:
-  nuclei-scan:
+  scan:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Make wait script executable
-        run: chmod +x scripts/wait-for-api.sh
+      - name: Start crAPI
+        run: |
+          docker compose -f docker-compose.yml --compatibility up -d
+          
+      - name: Wait for crAPI to be ready
+        run: |
+          for i in {1..30}; do
+            if curl -s http://localhost:8888/health > /dev/null; then
+              echo "crAPI is ready!"
+              exit 0
+            fi
+            echo "Waiting for crAPI... ($i/30)"
+            sleep 5
+          done
+          echo "crAPI did not become ready in time"
+          exit 1
 
-      # ===== Установка Nuclei =====
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.21'
+      - name: Register test user
+        id: register
+        run: |
+          curl -X POST http://localhost:8888/identity/api/auth/signup \
+            -H "Content-Type: application/json" \
+            -d '{"email": "ci-test@example.com", "password": "CITest123!"}' || true
+          
+      - name: Get authentication token
+        id: auth
+        run: |
+          RESPONSE=$(curl -s -X POST http://localhost:8888/identity/api/auth/login \
+            -H "Content-Type: application/json" \
+            -d '{"email": "ci-test@example.com", "password": "CITest123!"}')
+          TOKEN=$(echo $RESPONSE | jq -r '.token')
+          echo "token=$TOKEN" >> $GITHUB_OUTPUT
+          echo "Token obtained successfully"
 
+      - name: Download OpenAPI specification
+        run: |
+          curl -L -o openapi.json https://raw.githubusercontent.com/OWASP/crAPI/main/docs/openapi.json
+          echo "OpenAPI spec downloaded, size: $(wc -c < openapi.json) bytes"
+          if ! jq empty openapi.json 2>/dev/null; then
+            echo "ERROR: Downloaded file is not valid JSON"
+            cat openapi.json
+            exit 1
+          fi
+          echo "OpenAPI spec is valid JSON"
+
+      # ИСПРАВЛЕНО: Устанавливаем Nuclei вручную, минуя action
       - name: Install Nuclei
         run: |
-          go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+          curl -s https://raw.githubusercontent.com/projectdiscovery/nuclei/master/install.sh | bash
+          sudo mv nuclei /usr/local/bin/
           nuclei -version
-          nuclei -update-templates
-
-      # ===== Развёртывание целевого API =====
-      - name: Setup target API - crAPI
-        if: inputs.target == 'crapi' || github.event_name == 'push'
-        run: |
-          echo "🚀 Развёртывание crAPI..."
-          git clone --depth 1 https://github.com/OWASP/crAPI.git /tmp/crapi
-          cd /tmp/crapi/deploy/docker
-          docker compose up -d
           
-          # Скачиваем OpenAPI спецификацию для Nuclei
-          mkdir -p /tmp/specs
-          curl -sL "https://raw.githubusercontent.com/OWASP/crAPI/develop/specs/openapi/openapi.yaml" \
-            -o /tmp/specs/crapi-openapi.yaml || echo "Spec not found"
-
-      - name: Setup target API - Juice Shop
-        if: inputs.target == 'juiceshop'
+      # ИСПРАВЛЕНО: Загружаем шаблоны отдельно (с retry)
+      - name: Download Nuclei templates
         run: |
-          echo "🚀 Развёртывание Juice Shop..."
-          docker run -d --name juiceshop \
-            -p 3000:3000 \
-            -e NODE_ENV=dev \
-            bkimminich/juice-shop
+          # Создаем директорию для шаблонов
+          mkdir -p ~/nuclei-templates
+          # Клонируем шаблоны с retry и shallow clone
+          git clone --depth 1 https://github.com/projectdiscovery/nuclei-templates.git ~/nuclei-templates || \
+          git clone --depth 1 https://gitclone.com/github.com/projectdiscovery/nuclei-templates.git ~/nuclei-templates
+          echo "Templates downloaded to ~/nuclei-templates"
 
-      - name: Setup target API - DVWS-Node
-        if: inputs.target == 'dvws-node'
+      # ИСПРАВЛЕНО: Запускаем Nuclei напрямую
+      - name: Run Nuclei DAST scan
         run: |
-          echo "🚀 Развёртывание DVWS-Node..."
-          git clone --depth 1 https://github.com/interference/DVWS-node.git /tmp/dvws
-          cd /tmp/dvws
-          docker compose up -d || docker-compose up -d
+          nuclei -l openapi.json \
+            -im openapi \
+            -dast \
+            -H "Authorization: Bearer ${{ steps.auth.outputs.token }}" \
+            -severity high,critical \
+            -include-rr \
+            -j \
+            -stats \
+            -si 15 \
+            -timeout 300 \
+            -t ~/nuclei-templates/ \
+            -o nuclei-report.json
+        continue-on-error: true
 
-      # ===== Ожидание готовности =====
-      - name: Wait for crAPI
-        if: inputs.target == 'crapi' || github.event_name == 'push'
-        run: ./scripts/wait-for-api.sh "http://localhost:8888/identity/api/v2/user/dashboard" 240
-
-      - name: Wait for Juice Shop
-        if: inputs.target == 'juiceshop'
-        run: ./scripts/wait-for-api.sh "http://localhost:3000" 120
-
-      - name: Wait for DVWS-Node
-        if: inputs.target == 'dvws-node'
-        run: ./scripts/wait-for-api.sh "http://localhost:8000" 120
-
-      # ===== Определение параметров =====
-      - name: Set scan parameters
-        id: params
-        run: |
-          case "${{ inputs.target }}" in
-            crapi|push)
-              echo "target_url=http://localhost:8888" >> $GITHUB_OUTPUT
-              echo "spec_path=/tmp/specs/crapi-openapi.yaml" >> $GITHUB_OUTPUT
-              echo "scan_name=crapi" >> $GITHUB_OUTPUT
-              ;;
-            juiceshop)
-              echo "target_url=http://localhost:3000" >> $GITHUB_OUTPUT
-              echo "spec_path=" >> $GITHUB_OUTPUT
-              echo "scan_name=juiceshop" >> $GITHUB_OUTPUT
-              ;;
-            dvws-node)
-              echo "target_url=http://localhost:8000" >> $GITHUB_OUTPUT
-              echo "spec_path=" >> $GITHUB_OUTPUT
-              echo "scan_name=dvws-node" >> $GITHUB_OUTPUT
-              ;;
-          esac
-
-      # ===== Запуск Nuclei =====
-      - name: Create results directory
-        run: mkdir -p nuclei-results
-
-      - name: Nuclei scan with OpenAPI template generation
-        if: steps.params.outputs.spec_path != ''
-        run: |
-          echo "🔍 Запуск Nuclei с OpenAPI спецификацией..."
-          
-          # Генерируем шаблоны из OpenAPI (если доступно)
-          if command -v nuclei &> /dev/null; then
-            # Основной скан с API-тегами
-            nuclei -u ${{ steps.params.outputs.target_url }} \
-              -o nuclei-results/api-findings.txt \
-              -jsonl -json-export nuclei-results/api-findings.json \
-              -tags api,owasp,cve,default-login,misconfig \
-              -severity low,medium,high,critical \
-              -timeout 30 \
-              -retries 2 \
-              -rate-limit 100 \
-              -c 25 \
-              -silent || true
-            
-            # Дополнительный скан с фокусом на CVE
-            nuclei -u ${{ steps.params.outputs.target_url }} \
-              -o nuclei-results/cve-findings.txt \
-              -jsonl -json-export nuclei-results/cve-findings.json \
-              -tags cve \
-              -severity medium,high,critical \
-              -timeout 30 \
-              -silent || true
-          fi
-
-      - name: Nuclei scan without OpenAPI
-        if: steps.params.outputs.spec_path == ''
-        run: |
-          echo "🔍 Запуск Nuclei (базовый скан)..."
-          
-          nuclei -u ${{ steps.params.outputs.target_url }} \
-            -o nuclei-results/findings.txt \
-            -jsonl -json-export nuclei-results/findings.json \
-            -tags api,owasp,cve,default-login,misconfig,exposure \
-            -severity low,medium,high,critical \
-            -timeout 30 \
-            -retries 2 \
-            -rate-limit 100 \
-            -c 25 \
-            -silent || true
-
-      # ===== Генерация HTML отчёта =====
-      - name: Generate Nuclei HTML report
-        if: always()
-        run: |
-          cd nuclei-results
-          
-          # Создаём HTML отчёт из JSONL
-          if [ -f api-findings.json ] || [ -f findings.json ]; then
-            cat << 'EOF' > report.html
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <title>Nuclei Scan Report</title>
-            <style>
-              body { font-family: Arial, sans-serif; margin: 20px; }
-              table { border-collapse: collapse; width: 100%; }
-              th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-              th { background-color: #4CAF50; color: white; }
-              .critical { color: #d32f2f; font-weight: bold; }
-              .high { color: #f57c00; font-weight: bold; }
-              .medium { color: #fbc02d; }
-              .low { color: #388e3c; }
-            </style>
-          </head>
-          <body>
-            <h1>Nuclei Scan Report</h1>
-            <p>Target: ${{ steps.params.outputs.target_url }}</p>
-            <p>Date: $(date)</p>
-            <div id="results"></div>
-            <script>
-              // Placeholder for dynamic content
-            </script>
-          </body>
-          </html>
-          EOF
-          fi
-
-      # ===== Подсчёт метрик =====
-      - name: Calculate metrics
-        if: always()
-        run: |
-          cd nuclei-results
-          
-          echo "## 📊 Nuclei Scan Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          
-          for file in *.json; do
-            if [ -f "$file" ]; then
-              COUNT=$(wc -l < "$file" 2>/dev/null || echo 0)
-              echo "- **$file**: $COUNT findings" >> $GITHUB_STEP_SUMMARY
-            fi
-          done
-          
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "📁 Результаты сохранены в артефактах" >> $GITHUB_STEP_SUMMARY
-
-      # ===== Сохранение артефактов =====
-      - name: Upload Nuclei artifacts
-        if: always()
+      - name: Upload scan report
         uses: actions/upload-artifact@v4
         with:
-          name: nuclei-results-${{ steps.params.outputs.scan_name }}
-          path: nuclei-results/
-          retention-days: 30
+          name: nuclei-dast-report
+          path: nuclei-report.json
+          if-no-files-found: warn
 
-      # ===== Очистка =====
-      - name: Cleanup crAPI
-        if: always() && (inputs.target == 'crapi' || github.event_name == 'push')
-        run: cd /tmp/crapi/deploy/docker && docker compose down -v || true
-
-      - name: Cleanup Juice Shop
-        if: always() && inputs.target == 'juiceshop'
-        run: docker rm -f juiceshop || true
-
-      - name: Cleanup DVWS-Node
-        if: always() && inputs.target == 'dvws-node'
-        run: cd /tmp/dvws && docker compose down -v || docker-compose down -v || true
+      - name: Stop crAPI
+        if: always()
+        run: |
+          docker compose -f docker-compose.yml down
