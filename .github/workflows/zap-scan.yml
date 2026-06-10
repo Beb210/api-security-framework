@@ -1,0 +1,158 @@
+name: OWASP ZAP API Scan
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Целевое API для сканирования'
+        required: true
+        default: 'crapi'
+        type: choice
+        options:
+          - crapi
+          - juiceshop
+          - dvws-node
+  push:
+    branches: [ main ]
+    paths:
+      - '.github/workflows/zap-scan.yml'
+
+jobs:
+  zap-scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Make wait script executable
+        run: chmod +x scripts/wait-for-api.sh
+
+      # ===== Развёртывание целевого API =====
+      - name: Setup target API - crAPI
+        if: inputs.target == 'crapi' || github.event_name == 'push'
+        run: |
+          echo "🚀 Развёртывание crAPI..."
+          git clone --depth 1 https://github.com/OWASP/crAPI.git /tmp/crapi
+          cd /tmp/crapi/deploy/docker
+          docker compose up -d
+          
+          # Скачиваем OpenAPI спецификацию
+          mkdir -p /tmp/specs
+          curl -sL "https://raw.githubusercontent.com/OWASP/crAPI/develop/specs/openapi/openapi.yaml" \
+            -o /tmp/specs/crapi-openapi.yaml || echo "Spec not found, will use URL"
+
+      - name: Setup target API - Juice Shop
+        if: inputs.target == 'juiceshop'
+        run: |
+          echo "🚀 Развёртывание Juice Shop..."
+          docker run -d --name juiceshop \
+            -p 3000:3000 \
+            -e NODE_ENV=dev \
+            bkimminich/juice-shop
+          
+          mkdir -p /tmp/specs
+          # Juice Shop не имеет OpenAPI по умолчанию, ZAP будет краулить
+
+      - name: Setup target API - DVWS-Node
+        if: inputs.target == 'dvws-node'
+        run: |
+          echo "🚀 Развёртывание DVWS-Node..."
+          git clone --depth 1 https://github.com/interference/DVWS-node.git /tmp/dvws
+          cd /tmp/dvws
+          docker compose up -d || docker-compose up -d
+
+      # ===== Ожидание готовности =====
+      - name: Wait for crAPI
+        if: inputs.target == 'crapi' || github.event_name == 'push'
+        run: ./scripts/wait-for-api.sh "http://localhost:8888/identity/api/v2/user/dashboard" 240
+
+      - name: Wait for Juice Shop
+        if: inputs.target == 'juiceshop'
+        run: ./scripts/wait-for-api.sh "http://localhost:3000" 120
+
+      - name: Wait for DVWS-Node
+        if: inputs.target == 'dvws-node'
+        run: ./scripts/wait-for-api.sh "http://localhost:8000" 120
+
+      # ===== Определение параметров сканирования =====
+      - name: Set scan parameters
+        id: params
+        run: |
+          case "${{ inputs.target }}" in
+            crapi|push)
+              echo "target_url=http://localhost:8888" >> $GITHUB_OUTPUT
+              echo "spec_path=/tmp/specs/crapi-openapi.yaml" >> $GITHUB_OUTPUT
+              echo "format=openapi" >> $GITHUB_OUTPUT
+              echo "scan_name=crapi" >> $GITHUB_OUTPUT
+              ;;
+            juiceshop)
+              echo "target_url=http://localhost:3000" >> $GITHUB_OUTPUT
+              echo "spec_path=" >> $GITHUB_OUTPUT
+              echo "format=" >> $GITHUB_OUTPUT
+              echo "scan_name=juiceshop" >> $GITHUB_OUTPUT
+              ;;
+            dvws-node)
+              echo "target_url=http://localhost:8000" >> $GITHUB_OUTPUT
+              echo "spec_path=" >> $GITHUB_OUTPUT
+              echo "format=" >> $GITHUB_OUTPUT
+              echo "scan_name=dvws-node" >> $GITHUB_OUTPUT
+              ;;
+          esac
+
+      # ===== Запуск OWASP ZAP =====
+      - name: ZAP API Scan (with OpenAPI)
+        if: steps.params.outputs.format == 'openapi'
+        uses: zaproxy/action-api-scan@v0.9.0
+        with:
+          target: ${{ steps.params.outputs.target_url }}
+          format: openapi
+          openapi_definition: ${{ steps.params.outputs.spec_path }}
+          allow_issue_writing: false
+          fail_action: false
+          cmd_options: '-a'
+
+      - name: ZAP Baseline Scan (without OpenAPI)
+        if: steps.params.outputs.format != 'openapi'
+        uses: zaproxy/action-baseline@v0.12.0
+        with:
+          target: ${{ steps.params.outputs.target_url }}
+          allow_issue_writing: false
+          fail_action: false
+          cmd_options: '-c 10 -S'
+
+      # ===== Сбор результатов =====
+      - name: Collect ZAP results
+        if: always()
+        run: |
+          mkdir -p zap-results
+          # Копируем все возможные файлы отчётов ZAP
+          find /github/home -name "*.json" -o -name "*.html" -o -name "*.md" 2>/dev/null | \
+            xargs -I {} cp {} zap-results/ 2>/dev/null || true
+          find /home/runner -name "report_json.json" -o -name "report_html.html" 2>/dev/null | \
+            xargs -I {} cp {} zap-results/ 2>/dev/null || true
+          ls -la zap-results/ || echo "No results found"
+
+      - name: Upload ZAP artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-results-${{ steps.params.outputs.scan_name }}
+          path: zap-results/
+          retention-days: 30
+
+      # ===== Очистка =====
+      - name: Cleanup crAPI
+        if: always() && (inputs.target == 'crapi' || github.event_name == 'push')
+        run: |
+          cd /tmp/crapi/deploy/docker && docker compose down -v || true
+
+      - name: Cleanup Juice Shop
+        if: always() && inputs.target == 'juiceshop'
+        run: docker rm -f juiceshop || true
+
+      - name: Cleanup DVWS-Node
+        if: always() && inputs.target == 'dvws-node'
+        run: |
+          cd /tmp/dvws && docker compose down -v || docker-compose down -v || true
