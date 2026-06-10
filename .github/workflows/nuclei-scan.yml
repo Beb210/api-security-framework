@@ -1,107 +1,114 @@
-name: CRAPI Security Scan with Nuclei (OpenAPI + DAST)
+name: Nuclei API Scan
 
 on:
-  push:
-    branches: [ main, master, develop ]
-  schedule:
-    - cron: '0 0 * * 0'
   workflow_dispatch:
+    inputs:
+      target:
+        description: 'Целевое API для сканирования'
+        required: true
+        default: 'crapi'
+        type: choice
+        options:
+          - crapi
+  push:
+    branches: [ main ]
+    paths:
+      - '.github/workflows/nuclei-scan.yml'
 
 jobs:
-  scan:
+  nuclei-scan:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Start crAPI
-        run: |
-          docker compose -f docker-compose.yml --compatibility up -d
-          
-      - name: Wait for crAPI to be ready
-        run: |
-          for i in {1..30}; do
-            if curl -s http://localhost:8888/health > /dev/null; then
-              echo "crAPI is ready!"
-              exit 0
-            fi
-            echo "Waiting for crAPI... ($i/30)"
-            sleep 5
-          done
-          echo "crAPI did not become ready in time"
-          exit 1
+      - name: Make wait script executable
+        run: chmod +x scripts/wait-for-api.sh
 
-      - name: Register test user
-        id: register
-        run: |
-          curl -X POST http://localhost:8888/identity/api/auth/signup \
-            -H "Content-Type: application/json" \
-            -d '{"email": "ci-test@example.com", "password": "CITest123!"}' || true
-          
-      - name: Get authentication token
-        id: auth
-        run: |
-          RESPONSE=$(curl -s -X POST http://localhost:8888/identity/api/auth/login \
-            -H "Content-Type: application/json" \
-            -d '{"email": "ci-test@example.com", "password": "CITest123!"}')
-          TOKEN=$(echo $RESPONSE | jq -r '.token')
-          echo "token=$TOKEN" >> $GITHUB_OUTPUT
-          echo "Token obtained successfully"
+      # ===== Установка Nuclei =====
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
 
-      - name: Download OpenAPI specification
-        run: |
-          curl -L -o openapi.json https://raw.githubusercontent.com/OWASP/crAPI/main/docs/openapi.json
-          echo "OpenAPI spec downloaded, size: $(wc -c < openapi.json) bytes"
-          if ! jq empty openapi.json 2>/dev/null; then
-            echo "ERROR: Downloaded file is not valid JSON"
-            cat openapi.json
-            exit 1
-          fi
-          echo "OpenAPI spec is valid JSON"
-
-      # ИСПРАВЛЕНО: Устанавливаем Nuclei вручную, минуя action
       - name: Install Nuclei
         run: |
-          curl -s https://raw.githubusercontent.com/projectdiscovery/nuclei/master/install.sh | bash
-          sudo mv nuclei /usr/local/bin/
+          go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
           nuclei -version
+          nuclei -update-templates
+
+      # ===== Развёртывание crAPI =====
+      - name: Clone and start crAPI
+        run: |
+          echo "🚀 Развёртывание crAPI..."
+          git clone --depth 1 https://github.com/OWASP/crAPI.git /tmp/crapi
+          cd /tmp/crapi/deploy/docker
+          docker compose up -d
+
+      # ===== Ожидание готовности =====
+      - name: Wait for crAPI
+        run: ./scripts/wait-for-api.sh "http://localhost:8888/identity/api/v2/user/dashboard" 240
+
+      # ===== Запуск Nuclei =====
+      - name: Create results directory
+        run: mkdir -p nuclei-results
+
+      - name: Nuclei scan with API templates
+        run: |
+          echo "🔍 Запуск Nuclei с API-шаблонами..."
           
-      # ИСПРАВЛЕНО: Загружаем шаблоны отдельно (с retry)
-      - name: Download Nuclei templates
-        run: |
-          # Создаем директорию для шаблонов
-          mkdir -p ~/nuclei-templates
-          # Клонируем шаблоны с retry и shallow clone
-          git clone --depth 1 https://github.com/projectdiscovery/nuclei-templates.git ~/nuclei-templates || \
-          git clone --depth 1 https://gitclone.com/github.com/projectdiscovery/nuclei-templates.git ~/nuclei-templates
-          echo "Templates downloaded to ~/nuclei-templates"
+          # Основной скан с API-тегами
+          nuclei -u http://localhost:8888 \
+            -o nuclei-results/api-findings.txt \
+            -jsonl -json-export nuclei-results/api-findings.json \
+            -tags api,owasp,cve,default-login,misconfig \
+            -severity low,medium,high,critical \
+            -timeout 30 \
+            -retries 2 \
+            -rate-limit 100 \
+            -c 25 \
+            -silent || true
+            
+          # Дополнительный скан с фокусом на CVE
+          nuclei -u http://localhost:8888 \
+            -o nuclei-results/cve-findings.txt \
+            -jsonl -json-export nuclei-results/cve-findings.json \
+            -tags cve \
+            -severity medium,high,critical \
+            -timeout 30 \
+            -silent || true
 
-      # ИСПРАВЛЕНО: Запускаем Nuclei напрямую
-      - name: Run Nuclei DAST scan
-        run: |
-          nuclei -l openapi.json \
-            -im openapi \
-            -dast \
-            -H "Authorization: Bearer ${{ steps.auth.outputs.token }}" \
-            -severity high,critical \
-            -include-rr \
-            -j \
-            -stats \
-            -si 15 \
-            -timeout 300 \
-            -t ~/nuclei-templates/ \
-            -o nuclei-report.json
-        continue-on-error: true
-
-      - name: Upload scan report
-        uses: actions/upload-artifact@v4
-        with:
-          name: nuclei-dast-report
-          path: nuclei-report.json
-          if-no-files-found: warn
-
-      - name: Stop crAPI
+      # ===== Подсчёт метрик =====
+      - name: Calculate metrics
         if: always()
         run: |
-          docker compose -f docker-compose.yml down
+          cd nuclei-results
+          
+          echo "## 📊 Nuclei Scan Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          for file in *.json; do
+            if [ -f "$file" ]; then
+              COUNT=$(wc -l < "$file" 2>/dev/null || echo 0)
+              echo "- **$file**: $COUNT findings" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo " Результаты сохранены в артефактах" >> $GITHUB_STEP_SUMMARY
+
+      # ===== Сохранение артефактов =====
+      - name: Upload Nuclei artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuclei-results-crapi
+          path: nuclei-results/
+          retention-days: 30
+
+      # ===== Очистка =====
+      - name: Stop crAPI
+        if: always()
+        run: cd /tmp/crapi/deploy/docker && docker compose down -v || true
